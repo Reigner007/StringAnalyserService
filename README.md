@@ -63,3 +63,11 @@ This project uses an in-memory store, meaning data resets when the server restar
 For production use, integrate a persistent store like MongoDB, PostgreSQL, or Redis.
 
 Code follows a modular MVC-like structure for scalability and clarity.
+
+
+## Local Setup ##
+
+Clone this repository
+
+git clone https://github.com/Reigner007/StringAnalyserService.git
+cd StringAnalyserService
