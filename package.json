@@ -1,9 +1,19 @@
 {
+  "name": "string-analyser-service",
+  "version": "1.0.0",
+  "description": "A Node.js API for analyzing and managing strings — computes length, palindrome status, unique characters, word count, SHA-256 hash, and character frequency mapping.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
-    "dotenv": "^17.2.3",
+    "dotenv": "^16.4.5",
     "express": "^5.1.0",
     "morgan": "^1.10.1"
-  }
+  },
+  "author": "Reigner",
+  "license": "MIT"
 }
