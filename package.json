@@ -4,8 +4,8 @@
   "description": "A Node.js API for analyzing and managing strings — computes length, palindrome status, unique characters, word count, SHA-256 hash, and character frequency mapping.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
