@@ -6,7 +6,7 @@ const {
   getAllStrings,
   filterByNaturalLanguage,
   deleteString
-} = require('../Controllers/stringController');
+} = require('../controllers/stringController');
 
 // ====== ROUTES ======
 

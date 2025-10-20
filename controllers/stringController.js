@@ -1,5 +1,5 @@
-const { analyzeString } = require('../Utils/stringUtils');
-const stringStore = require('../Data/stringStore');
+const { analyzeString } = require('../utils/stringUtils');
+const stringStore = require('../data/stringStore');
 
 // ===============================
 //  Create / Analyze a new string
