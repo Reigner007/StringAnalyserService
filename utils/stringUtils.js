@@ -1,39 +1,32 @@
-const crypto = require('crypto');
+const CryptoJS = require("crypto-js");
 
 /**
- * 🔹 Check if a string is a palindrome
- * @param {string} str 
- * @returns {boolean}
+ * 🔹 Check if a string is a palindrome (case-insensitive)
  */
 function isPalindrome(str) {
-  const clean = str.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return clean === clean.split('').reverse().join('');
+  const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return cleaned === cleaned.split("").reverse().join("");
 }
 
 /**
- * 🔹 Count how many words are in a string
- * @param {string} str 
- * @returns {number}
+ * 🔹 Count unique alphanumeric characters
+ */
+function countUniqueCharacters(str) {
+  const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return new Set(cleaned).size;
+}
+
+/**
+ * 🔹 Count number of words
  */
 function countWords(str) {
-  const words = str.trim().split(/\s+/);
-  return str.trim() === '' ? 0 : words.length;
+  const trimmed = str.trim();
+  if (!trimmed) return 0;
+  return trimmed.split(/\s+/).length;
 }
 
 /**
- * 🔹 Count how many vowels are in a string
- * @param {string} str 
- * @returns {number}
- */
-function countVowels(str) {
-  const matches = str.match(/[aeiou]/gi);
-  return matches ? matches.length : 0;
-}
-
-/**
- * 🔹 Get character frequency (e.g., { a: 2, b: 1 })
- * @param {string} str 
- * @returns {object}
+ * 🔹 Get character frequency map (only alphanumeric)
  */
 function getCharacterFrequency(str) {
   const freq = {};
@@ -46,40 +39,34 @@ function getCharacterFrequency(str) {
 }
 
 /**
- * 🔹 Count distinct (unique) characters
- * @param {string} str 
- * @returns {number}
- */
-function countUniqueCharacters(str) {
-  const clean = str.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return new Set(clean).size;
-}
-
-/**
- * 🔹 Generate a SHA-256 hash for unique identification
- * @param {string} str 
- * @returns {string}
+ * 🔹 Generate SHA-256 hash (for unique identification)
  */
 function generateHash(str) {
-  return crypto.createHash('sha256').update(str).digest('hex');
+  return CryptoJS.SHA256(str).toString(CryptoJS.enc.Hex);
 }
 
 /**
- * 🔹 Analyze a string and return computed properties
- * @param {string} value 
- * @returns {object}
+ * 🔹 Analyze and format a string result
  */
 function analyzeString(value) {
+  if (typeof value !== "string") {
+    throw new Error("Input must be a string");
+  }
+
+  const hash = generateHash(value);
+
   return {
+    id: hash,
     value,
-    length: value.length,
-    word_count: countWords(value),
-    is_palindrome: isPalindrome(value),
-    unique_characters: countUniqueCharacters(value),
-    vowel_count: countVowels(value),
-    character_frequency_map: getCharacterFrequency(value),
-    sha256_hash: generateHash(value),
-    timestamp: new Date().toISOString()
+    properties: {
+      length: value.length,
+      is_palindrome: isPalindrome(value),
+      unique_characters: countUniqueCharacters(value),
+      word_count: countWords(value),
+      sha256_hash: hash,
+      character_frequency_map: getCharacterFrequency(value),
+    },
+    created_at: new Date().toISOString(),
   };
 }
 
@@ -87,8 +74,7 @@ module.exports = {
   analyzeString,
   isPalindrome,
   countWords,
-  countVowels,
-  getCharacterFrequency,
   countUniqueCharacters,
-  generateHash
+  getCharacterFrequency,
+  generateHash,
 };

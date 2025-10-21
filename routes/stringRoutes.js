@@ -1,28 +1,35 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
   createString,
   getStringByValue,
   getAllStrings,
   filterByNaturalLanguage,
-  deleteString
-} = require('../controllers/stringController');
+  deleteString,
+} = require("../controllers/stringController");
 
-// ====== ROUTES ======
+// ===================================
+// 🔹 ROUTE DEFINITIONS (Ordered Correctly)
+// ===================================
 
-//  Create / Analyze a new string
-router.post('/', createString);
+// 🟢 Create & Analyze a String
+// POST /strings
+router.post("/", createString);
 
-//  Filter strings using natural language
-router.get('/filter-by-natural-language', filterByNaturalLanguage);
+// 🔍 Natural Language Filtering
+// GET /strings/filter-by-natural-language?query=show me palindromes
+router.get("/filter-by-natural-language", filterByNaturalLanguage);
 
-//  Get all strings with query filters
-router.get('/', getAllStrings);
+// 🧩 Get All Strings with Optional Query Filters
+// GET /strings?minLength=3&maxLength=10&palindrome=true
+router.get("/", getAllStrings);
 
-//  Get info for a specific string
-router.get('/:value', getStringByValue);
+// 🔎 Get Details of a Specific String
+// GET /strings/:value
+router.get("/:value", getStringByValue);
 
-//  Delete a string
-router.delete('/:value', deleteString);
+// ❌ Delete a Specific String
+// DELETE /strings/:value
+router.delete("/:value", deleteString);
 
 module.exports = router;

@@ -1,79 +1,74 @@
-const crypto = require('crypto');
+const CryptoJS = require("crypto-js");
 
-// 🧠 In-memory store for analyzed strings
-const strings = new Map();
+let strings = [];
 
-/**
- * 🔹 Generate SHA256 hash (same as utils)
- */
+// ===============================
+// 🔹 Generate SHA-256 Hash
+// ===============================
 function generateHash(value) {
-  return crypto.createHash('sha256').update(value).digest('hex').slice(0, 10);
+  return CryptoJS.SHA256(value).toString(CryptoJS.enc.Hex);
 }
 
-/**
- * 🔹 Save analyzed string
- */
-function save(hash, data) {
-  strings.set(hash, data);
-}
-
-/**
- * 🔹 Find a string by its hash
- */
-function find(hash) {
-  return strings.get(hash) || null;
-}
-
-/**
- * 🔹 Check if a string already exists
- */
+// ===============================
+// 🔹 Check if a string already exists
+// ===============================
 function exists(hash) {
-  return strings.has(hash);
+  return strings.some((s) => s.id === hash);
 }
 
-/**
- * 🔹 Remove a string
- */
+// ===============================
+// 🔹 Save analyzed record
+// ===============================
+function save(hash, record) {
+  strings.push(record);
+  return record;
+}
+
+// ===============================
+// 🔹 Find a string by hash
+// ===============================
+function find(hash) {
+  return strings.find((s) => s.id === hash);
+}
+
+// ===============================
+// 🔹 Remove string by hash
+// ===============================
 function remove(hash) {
-  return strings.delete(hash);
+  const index = strings.findIndex((s) => s.id === hash);
+  if (index !== -1) {
+    strings.splice(index, 1);
+    return true;
+  }
+  return false;
 }
 
-/**
- * 🔹 Filter strings with multiple criteria
- */
-function filter(filters = {}) {
-  let results = Array.from(strings.values());
+// ===============================
+// 🔹 Filter strings based on queries
+// ===============================
+function filter({ is_palindrome, min_length, max_length, word_count, contains_character }) {
+  return strings.filter((s) => {
+    const p = s.properties;
 
-  if (filters.is_palindrome !== undefined) {
-    const isPal = filters.is_palindrome === 'true' || filters.is_palindrome === true;
-    results = results.filter(s => s.is_palindrome === isPal);
-  }
+    if (is_palindrome !== undefined && p.is_palindrome !== is_palindrome) return false;
+    if (min_length !== undefined && p.length < min_length) return false;
+    if (max_length !== undefined && p.length > max_length) return false;
+    if (word_count !== undefined && p.word_count !== word_count) return false;
+    if (
+      contains_character !== undefined &&
+      !s.value.toLowerCase().includes(contains_character.toLowerCase())
+    )
+      return false;
 
-  if (filters.min_length) {
-    results = results.filter(s => s.length >= parseInt(filters.min_length));
-  }
-
-  if (filters.max_length) {
-    results = results.filter(s => s.length <= parseInt(filters.max_length));
-  }
-
-  if (filters.word_count) {
-    results = results.filter(s => s.word_count === parseInt(filters.word_count));
-  }
-
-  if (filters.contains_character) {
-    const char = filters.contains_character.toLowerCase();
-    results = results.filter(s => s.value.toLowerCase().includes(char));
-  }
-
-  return results;
+    return true;
+  });
 }
 
 module.exports = {
   generateHash,
+  exists,
   save,
   find,
-  exists,
   remove,
-  filter
+  filter,
 };
